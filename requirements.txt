@@ -5,4 +5,4 @@ fastapi==0.63.0
 uvicorn==0.13.4
 aiofiles==0.6.0
 python-multipart==0.0.5
-PyMuPDF==1.16.0
+PyMuPDF==1.14.20
