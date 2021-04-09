@@ -16,11 +16,11 @@ app = FastAPI()
 async def pdfToText(
     background_tasks: BackgroundTasks, byteFile: UploadFile = File(...)
 ):
-    path = os.getcwd() + "/saved_pdf/" + byteFile.filename
+    path = "./saved_pdf/" + byteFile.filename
     with open(path, "ab") as f:
         for chunk in iter(lambda: byteFile.file.read(10000), b""):
             f.write(chunk)
-    # background_tasks.add_task(init_audio, byteFile.filename)
+    background_tasks.add_task(init_audio, byteFile.filename)
     await pdf_all(byteFile.filename)
     return {
         "filename": byteFile.filename,
@@ -49,9 +49,6 @@ async def returnTxt(filename: str):
     return {"Error": "Text not found!"}
 
 
-
-
-
 @app.post("/get_mp3")
 async def returnMp3(filename: str):
     if filename[-4:] == ".pdf":
@@ -60,8 +57,6 @@ async def returnMp3(filename: str):
     if os.path.exists(file_path):
         return FileResponse(file_path)
     return {"Error": "Mp3 not found!"}
-
-
 
 
 if __name__ == "__main__":
