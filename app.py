@@ -1,9 +1,9 @@
 from typing import List
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi import File, UploadFile
 import os
-from minePdf import pdf_all
+from minePdf import pdf_all, init_audio
 
 # pyttsx3
 # espeak
@@ -13,18 +13,15 @@ app = FastAPI()
 
 
 @app.post("/pdf_initialize")
-async def pdfToText(byteFile: UploadFile = File(...)):
+async def pdfToText(
+    background_tasks: BackgroundTasks, byteFile: UploadFile = File(...)
+):
     path = os.getcwd() + "/saved_pdf/" + byteFile.filename
     with open(path, "ab") as f:
         for chunk in iter(lambda: byteFile.file.read(10000), b""):
             f.write(chunk)
-
-    # Do things with file here
-    # Save text as a _string
+    # background_tasks.add_task(init_audio, byteFile.filename)
     await pdf_all(byteFile.filename)
-    # Uncomment this statement and comment out the test return
-
-    # return{"text":_string}
     return {
         "filename": byteFile.filename,
         "content-type": byteFile.content_type,
@@ -32,22 +29,31 @@ async def pdfToText(byteFile: UploadFile = File(...)):
     }
 
 
-@app.post("get_summary")
+@app.post("/get_summary")
 async def returnSummary(filename: str):
-    if filename[:-4] == ".pdf":
+    if filename[-4:] == ".pdf":
         filename = filename[:-4]
-    return FileResponse("./saved_summary/" + filename + ".txt")
+    file_path = os.path.join("./", "saved_summary/" + filename + ".txt")
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    return {"Error": "Summary not found!"}
 
 
-@app.post("get_text")
+@app.post("/get_text")
 async def returnTxt(filename: str):
-    if filename[:-4] == ".pdf":
+    if filename[-4:] == ".pdf":
         filename = filename[:-4]
-    return FileResponse("./saved_txt/" + filename + ".txt")
+    file_path = os.path.join("./", "saved_txt/" + filename + ".txt")
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    return {"Error": "Text not found!"}
 
 
-@app.post("get_mp3")
+@app.post("/get_mp3")
 async def returnMp3(filename: str):
-    if filename[:-4] == ".pdf":
+    if filename[-4:] == ".pdf":
         filename = filename[:-4]
-    return FileResponse("./saved_mp3/" + filename + ".txt")
+    file_path = os.path.join("./", "saved_mp3/" + filename + ".mp3")
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    return {"Error": "Mp3 not found!"}
