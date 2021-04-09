@@ -5,6 +5,7 @@ from collections import defaultdict
 from fitz.fitz import getTextlength
 from segment import viterbi
 import pyttsx3
+from gtts import gTTS
 
 
 def frequencyThreshold(ans):
@@ -12,7 +13,7 @@ def frequencyThreshold(ans):
     newans = []
     for block in ans:
         f[block[0]] += block[2]
-    print(f)
+    # print(f)
     threshold = max(f, key=lambda x: f[x])
     for block in ans:
         if threshold <= block[0]:
@@ -20,65 +21,95 @@ def frequencyThreshold(ans):
     return "\n".join(newans)
 
 
-doc = fitz.open("yolo.pdf")
-ans = []
-flag = 1
-for index in range(0, doc.page_count):
-    page1 = doc.load_page(index)
-    text = page1.get_text("json")
-    jtext = json.loads(text)
+def doc2sum(astring):
+    return astring
 
-    for block in jtext['blocks']:
-        if('lines' in block.keys()):
-            # print("----")
-            str = ""
-            size = block['lines'][0]['spans'][0]['size']
-            for line in block['lines']:
-                for li in line['spans']:
-                    str = str+li['text']
 
-            # data cleaning
-            str = str.lower()
-            str.replace("\n", " ")
-            st = re.sub(r"\. ", ". \n", str)
-            st = re.sub(r'^https?:\/\/.*[\r\n]*', '', st, flags=re.MULTILINE)
-            st = re.sub(r"\.( )*", ". \n", st)
-            st = re.sub(r"( )*-( )*", "", st)
-            st = re.sub(r'\d+\. \n', "", st)
-            st = re.sub(r"\[[0-9]+\]", "", st)
+async def pdf_all(filename):
+    doc = fitz.open("./saved_pdf/" + filename)
+    ans = []
+    flag = 1
+    for index in range(0, doc.page_count):
+        page1 = doc.load_page(index)
+        text = page1.get_text("json")
+        jtext = json.loads(text)
 
-            # print("st",st)
-            numlines = len(list(st.split('\n')))
-            correctedSentence = []
-            for line in list(st.split('\n')):
-                correctedWords = []
-                if line:
-                    wordCount = len(list(line.split(' ')))
-                    for word in list(line.split(' ')):
-                        vt = viterbi(word)[1]
-                        if(vt and vt[0] == 'references' and numlines == 1 and wordCount <= 2):
-                            flag = 0
+        for block in jtext["blocks"]:
+            if "lines" in block.keys():
+                # print("----")
+                str = ""
+                size = block["lines"][0]["spans"][0]["size"]
+                for line in block["lines"]:
+                    for li in line["spans"]:
+                        str = str + li["text"]
+
+                # data cleaning
+                str = str.lower()
+                str.replace("\n", " ")
+                st = re.sub(r"\. ", ". \n", str)
+                st = re.sub(r"^https?:\/\/.*[\r\n]*", "", st, flags=re.MULTILINE)
+                st = re.sub(r"\.( )*", ". \n", st)
+                st = re.sub(r"( )*-( )*", "", st)
+                st = re.sub(r"\d+\. \n", "", st)
+                st = re.sub(r"\[[0-9]+\]", "", st)
+
+                # print("st",st)
+                numlines = len(list(st.split("\n")))
+                correctedSentence = []
+                for line in list(st.split("\n")):
+                    correctedWords = []
+                    if line:
+                        wordCount = len(list(line.split(" ")))
+                        for word in list(line.split(" ")):
+                            vt = viterbi(word)[1]
+                            if (
+                                vt
+                                and vt[0] == "references"
+                                and numlines == 1
+                                and wordCount <= 2
+                            ):
+                                flag = 0
+                                break
+                            correctedWords += vt
+                        # print("CW", correctedWords)
+                        if flag == 0:
                             break
-                        correctedWords += vt
-                    # print("CW", correctedWords)
-                    if flag == 0:
-                        break
-                    correctedWords = " ".join(correctedWords)
-                    correctedSentence.append(correctedWords)
+                        correctedWords = " ".join(correctedWords)
+                        correctedSentence.append(correctedWords)
+                if flag == 0:
+                    break
+
+                st = "\n".join(correctedSentence)
+                ans.append((size, st, numlines))
+
             if flag == 0:
                 break
-
-            st = "\n".join(correctedSentence)
-            ans.append((size, st, numlines))
-
         if flag == 0:
             break
-    if flag == 0:
-        break
 
-ans = frequencyThreshold(ans)
-speaker = pyttsx3.init()
-speaker.save_to_file(ans, 'speech.mp3')
-speaker.runAndWait()
-print(ans)
-print("\n")
+    ans = frequencyThreshold(ans)
+    summary = doc2sum(ans)
+    try:
+        with open("./saved_summary/" + filename[:-4] + ".txt", "w") as f:
+            f.write(summary)
+    except IOError as e:
+        print(e)
+    try:
+        with open("./saved_txt/" + filename[:-4] + ".txt", "w") as f:
+            f.write(ans)
+    except IOError as e:
+        print(e)
+    print("textdone")
+    # speaker = pyttsx3.init()
+    # speaker.save_to_file(ans, "./saved_mp3/" + filename[:-4] + ".mp3")
+    # speaker.runAndWait()
+
+    myobj = gTTS(text=ans, lang="en", slow=False)
+    myobj.save("./saved_mp3/" + filename[:-4] + ".mp3")
+    print("saved")
+    # print(ans)
+    # print("\n")
+
+
+# if __name__ == "__main__":
+#     pdf_all("r1.pdf")
