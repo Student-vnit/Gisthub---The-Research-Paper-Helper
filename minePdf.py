@@ -37,13 +37,13 @@ def init_audio(filename):
         with open(file_path, "r") as f:
             content = f.read()
     contentD = copy.deepcopy(content)
-    speaker = pyttsx3.init()
-    speaker.save_to_file(contentD, audio_path)
-    speaker.runAndWait()
+    # speaker = pyttsx3.init()
+    # speaker.save_to_file(contentD, audio_path)
+    # speaker.runAndWait()
 
-    # myobj = gTTS(text=content, lang="en", slow=False)s
-    # myobj.save(audio_path)
-    # print("Audio Saved: {}\n".format(audio_path))
+    myobj = gTTS(text=contentD, lang="en", slow=False)s
+    myobj.save(audio_path)
+    print("Audio Saved: {}\n".format(audio_path))
 
 
 async def pdf_all(filename):
