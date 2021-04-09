@@ -6,6 +6,8 @@ from fitz.fitz import getTextlength
 from segment import viterbi
 import pyttsx3
 from gtts import gTTS
+import os
+import copy
 
 
 def frequencyThreshold(ans):
@@ -21,8 +23,27 @@ def frequencyThreshold(ans):
     return "\n".join(newans)
 
 
-def doc2sum(astring):
+def init_summary(filename):
     return astring
+
+
+def init_audio(filename):
+    content = ""
+    if filename[-4:] == ".pdf":
+        filename = filename[:-4]
+    file_path = os.path.join("./", "saved_txt/" + filename + ".txt")
+    audio_path = os.path.join("./", "saved_mp3/" + filename + ".mp3")
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            content = f.read()
+    contentD = copy.deepcopy(content)
+    speaker = pyttsx3.init()
+    speaker.save_to_file(contentD, audio_path)
+    speaker.runAndWait()
+
+    # myobj = gTTS(text=content, lang="en", slow=False)s
+    # myobj.save(audio_path)
+    # print("Audio Saved: {}\n".format(audio_path))
 
 
 async def pdf_all(filename):
@@ -88,12 +109,6 @@ async def pdf_all(filename):
             break
 
     ans = frequencyThreshold(ans)
-    summary = doc2sum(ans)
-    try:
-        with open("./saved_summary/" + filename[:-4] + ".txt", "w") as f:
-            f.write(summary)
-    except IOError as e:
-        print(e)
     try:
         with open("./saved_txt/" + filename[:-4] + ".txt", "w") as f:
             f.write(ans)
@@ -104,9 +119,9 @@ async def pdf_all(filename):
     # speaker.save_to_file(ans, "./saved_mp3/" + filename[:-4] + ".mp3")
     # speaker.runAndWait()
 
-    myobj = gTTS(text=ans, lang="en", slow=False)
-    myobj.save("./saved_mp3/" + filename[:-4] + ".mp3")
-    print("saved")
+    # myobj = gTTS(text=ans, lang="en", slow=False)
+    # myobj.save("./saved_mp3/" + filename[:-4] + ".mp3")
+    # print("saved")
     # print(ans)
     # print("\n")
 

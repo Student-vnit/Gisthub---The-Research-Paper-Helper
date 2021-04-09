@@ -1,1 +1,5 @@
 __pycache__/
+saved_summary/*
+saved_txt/*
+saved_mp3/*
+saved_pdf/*
