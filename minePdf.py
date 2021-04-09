@@ -41,7 +41,7 @@ def init_audio(filename):
     # speaker.save_to_file(contentD, audio_path)
     # speaker.runAndWait()
 
-    myobj = gTTS(text=contentD, lang="en", slow=False)s
+    myobj = gTTS(text=contentD, lang="en", slow=False)
     myobj.save(audio_path)
     print("Audio Saved: {}\n".format(audio_path))
 
