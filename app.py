@@ -49,6 +49,9 @@ async def returnTxt(filename: str):
     return {"Error": "Text not found!"}
 
 
+
+
+
 @app.post("/get_mp3")
 async def returnMp3(filename: str):
     if filename[-4:] == ".pdf":
@@ -57,3 +60,9 @@ async def returnMp3(filename: str):
     if os.path.exists(file_path):
         return FileResponse(file_path)
     return {"Error": "Mp3 not found!"}
+
+
+
+
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=environ.get("PORT", 5000))
