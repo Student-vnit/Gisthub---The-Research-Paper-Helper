@@ -1,5 +1,4 @@
 pyttsx3==2.90
-PyMuPDF==1.18.9
 requests==2.25.1
 gTTS==2.2.2
 fastapi==0.63.0
