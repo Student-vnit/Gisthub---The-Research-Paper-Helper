@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi import File, UploadFile
 import os
 from minePdf import pdf_all, init_audio
+from fastapi.middleware.cors import CORSMiddleware
 
 # from reportlab.pdfgen.canvas import Canvas
 
@@ -12,7 +13,21 @@ from minePdf import pdf_all, init_audio
 # fastapi
 # ffmpeg
 app = FastAPI()
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:5000",
+]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # @app.on_event("startup")
 # async def startup_event():
