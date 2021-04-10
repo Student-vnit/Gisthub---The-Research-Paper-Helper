@@ -30,7 +30,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/Student-vnit/Gisthub---The-Research-Paper-Helper">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="src/logo.jpeg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Gisthub---The-Research-Paper-Helper</h3>
