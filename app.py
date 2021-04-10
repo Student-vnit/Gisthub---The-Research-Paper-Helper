@@ -3,7 +3,7 @@ from fastapi import FastAPI, Query, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi import File, UploadFile
 import os
-from minePdf import pdf_all, init_audio, init_summary
+from minePdf import pdf_all, init_audio
 
 # from reportlab.pdfgen.canvas import Canvas
 
