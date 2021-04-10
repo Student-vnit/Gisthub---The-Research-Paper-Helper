@@ -18,7 +18,6 @@ origins = [
     "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:8080",
-    "http://localhost:5000",
 ]
 
 app.add_middleware(
@@ -90,4 +89,4 @@ async def returnMp3(filename: str):
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=environ.get("PORT", 8333))
+    app.run(debug=False, host="0.0.0.0", port=environ.get("PORT", 5000))
