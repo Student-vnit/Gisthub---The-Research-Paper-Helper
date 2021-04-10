@@ -27,8 +27,8 @@ async def pdfToText(
             f.write(chunk)
     # background_tasks.add_task(init_audio, byteFile.filename)
 
-    pdf_all(byteFile.filename)
-    init_audio(byteFile.filename)
+    await pdf_all(byteFile.filename)
+    await init_audio(byteFile.filename)
     return {
         "filename": byteFile.filename,
         "content-type": byteFile.content_type,
