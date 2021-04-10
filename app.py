@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi import File, UploadFile
 import os
 from minePdf import pdf_all, init_audio
+from reportlab.pdfgen.canvas import Canvas
 
 # pyttsx3
 # espeak
@@ -17,6 +18,9 @@ async def pdfToText(
     background_tasks: BackgroundTasks, byteFile: UploadFile = File(...)
 ):
     path = "./saved_pdf/" + byteFile.filename
+    with open(path, "w") as f:
+        f.write("")
+
     with open(path, "ab") as f:
         for chunk in iter(lambda: byteFile.file.read(10000), b""):
             f.write(chunk)
