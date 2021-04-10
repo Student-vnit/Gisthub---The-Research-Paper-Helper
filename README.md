@@ -170,6 +170,8 @@ Abhishek Jaiswal - [github@abhishekjaiswal55236](https://github.com/abhishekjais
 
 Samruddhi - [github@shraddhab29](https://github.com/shraddhab29) - shraddhabhagawat2001@gmail.com
 
+<br /><br />
+
 Project Link: [https://github.com/Student-vnit/Gisthub---The-Research-Paper-Helper](https://github.com/Student-vnit/Gisthub---The-Research-Paper-Helper)
 
 Website Link: [https://sites.google.com/students.vnit.ac.in/gisthub/home](https://sites.google.com/students.vnit.ac.in/gisthub/home)

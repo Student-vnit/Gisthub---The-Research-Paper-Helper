@@ -42,64 +42,64 @@ async def init_audio(filename):
     print("Audio Saved: {}\n".format(audio_path))
 
 
-async def init_summary(filename):
-    if filename[-4:] == ".pdf":
-        filename = filename[:-4]
-    file_path = os.path.join("./", "saved_txt/" + filename + ".txt")
-    summary_path = os.path.join("./", "saved_summary/" + filename + ".txt")
-    text = ""
-    f = open(file_path, mode="r", encoding="utf-8")
-    for line in f:
-        text = text + str(line) + "\n"
+# async def init_summary(filename):
+# if filename[-4:] == ".pdf":
+#     filename = filename[:-4]
+# file_path = os.path.join("./", "saved_txt/" + filename + ".txt")
+# summary_path = os.path.join("./", "saved_summary/" + filename + ".txt")
+# text = ""
+# f = open(file_path, mode="r", encoding="utf-8")
+# for line in f:
+#     text = text + str(line) + "\n"
 
-    response = []
-    lines = list(text.split("\n"))
-    cnt = 0
-    abstractive_summary = ""
-    if len(lines) > 200:
-        final_summary = ""
-        threshold_lines = 200
-        while cnt < len(lines):
-            sub_str = lines[cnt : min(cnt + threshold_lines, len(lines))]
-            sub_str = "\n".join(sub_str)
-            inputs = tokenizer.encode(
-                "summarize: " + sub_str,
-                return_tensors="pt",
-                max_length=512,
-                truncation=True,
-            )
-            outputs = model.generate(
-                inputs,
-                max_length=700,
-                min_length=100,
-                length_penalty=2.0,
-                num_beams=4,
-                early_stopping=True,
-            )
-            abstractive_summary = abstractive_summary + tokenizer.decode(outputs[0])
-            cnt = cnt + threshold_lines
-    else:
-        print("abstractive only")
-        final_summary = text
-        inputs = tokenizer.encode(
-            "summarize: " + final_summary,
-            return_tensors="pt",
-            max_length=512,
-            truncation=True,
-        )
-        outputs = model.generate(
-            inputs,
-            max_length=700,
-            min_length=100,
-            length_penalty=2.0,
-            num_beams=4,
-            early_stopping=True,
-        )
+# response = []
+# lines = list(text.split("\n"))
+# cnt = 0
+# abstractive_summary = ""
+# if len(lines) > 200:
+#     final_summary = ""
+#     threshold_lines = 200
+#     while cnt < len(lines):
+#         sub_str = lines[cnt : min(cnt + threshold_lines, len(lines))]
+#         sub_str = "\n".join(sub_str)
+#         inputs = tokenizer.encode(
+#             "summarize: " + sub_str,
+#             return_tensors="pt",
+#             max_length=512,
+#             truncation=True,
+#         )
+#         outputs = model.generate(
+#             inputs,
+#             max_length=700,
+#             min_length=100,
+#             length_penalty=2.0,
+#             num_beams=4,
+#             early_stopping=True,
+#         )
+#         abstractive_summary = abstractive_summary + tokenizer.decode(outputs[0])
+#         cnt = cnt + threshold_lines
+# else:
+#     print("abstractive only")
+#     final_summary = text
+#     inputs = tokenizer.encode(
+#         "summarize: " + final_summary,
+#         return_tensors="pt",
+#         max_length=512,
+#         truncation=True,
+#     )
+#     outputs = model.generate(
+#         inputs,
+#         max_length=700,
+#         min_length=100,
+#         length_penalty=2.0,
+#         num_beams=4,
+#         early_stopping=True,
+#     )
 
-        abstractive_summary = tokenizer.decode(outputs[0])
-    with open(summary_path, "w") as f:
-        f.write(abstractive_summary)
-    print("summary done")
+#     abstractive_summary = tokenizer.decode(outputs[0])
+# with open(summary_path, "w") as f:
+#     f.write(abstractive_summary)
+# print("summary done")
 
 
 async def pdf_all(filename):
