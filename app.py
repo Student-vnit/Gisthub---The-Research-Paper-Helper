@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import FastAPI, Query, BackgroundTasks
 from fastapi.responses import FileResponse
-from fastapi import File, UploadFile
+from fastapi import File, UploadFile, Request
 import os
 from minePdf import pdf_all, init_audio
 from fastapi.middleware.cors import CORSMiddleware
@@ -43,14 +43,20 @@ async def pdfToText(
             f.write(chunk)
     # background_tasks.add_task(init_summary, byteFile.filename)
     background_tasks.add_task(init_audio, byteFile.filename)
-
-    await pdf_all(byteFile.filename)
+    background_tasks.add_task(byteFile.filename)
+    # await pdf_all(byteFile.filename)
     # await init_audio(byteFile.filename)
     return {
         "filename": byteFile.filename,
         "content-type": byteFile.content_type,
         "file": byteFile.file,
     }
+
+
+@app.post("/test_formdata")
+async def formdata(byteFile: UploadFile = File(...)):
+    print(byteFile.filename)
+    return {"status": "done"}
 
 
 @app.post("/get_summary")
