@@ -4,7 +4,8 @@ from fastapi.responses import FileResponse
 from fastapi import File, UploadFile
 import os
 from minePdf import pdf_all, init_audio
-from reportlab.pdfgen.canvas import Canvas
+
+# from reportlab.pdfgen.canvas import Canvas
 
 # pyttsx3
 # espeak
