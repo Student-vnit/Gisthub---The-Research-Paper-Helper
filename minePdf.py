@@ -27,7 +27,7 @@ def init_summary(filename):
     return astring
 
 
-def init_audio(filename):
+async def init_audio(filename):
     content = ""
     if filename[-4:] == ".pdf":
         filename = filename[:-4]

@@ -20,8 +20,10 @@ async def pdfToText(
     with open(path, "ab") as f:
         for chunk in iter(lambda: byteFile.file.read(10000), b""):
             f.write(chunk)
-    background_tasks.add_task(init_audio, byteFile.filename)
-    await pdf_all(byteFile.filename)
+    # background_tasks.add_task(init_audio, byteFile.filename)
+
+    pdf_all(byteFile.filename)
+    init_audio(byteFile.filename)
     return {
         "filename": byteFile.filename,
         "content-type": byteFile.content_type,
