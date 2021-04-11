@@ -1,3 +1,4 @@
+# Used to get summary from server
 import requests
 from io import BytesIO
 import os
