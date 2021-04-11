@@ -8,6 +8,8 @@ import pyttsx3
 from gtts import gTTS
 import os
 import copy
+import time
+import requests
 
 
 def frequencyThreshold(ans):
@@ -24,6 +26,7 @@ def frequencyThreshold(ans):
 
 
 async def init_audio(filename):
+    time.sleep(10)
     content = ""
     if filename[-4:] == ".pdf":
         filename = filename[:-4]
@@ -42,64 +45,24 @@ async def init_audio(filename):
     print("Audio Saved: {}\n".format(audio_path))
 
 
-# async def init_summary(filename):
-# if filename[-4:] == ".pdf":
-#     filename = filename[:-4]
-# file_path = os.path.join("./", "saved_txt/" + filename + ".txt")
-# summary_path = os.path.join("./", "saved_summary/" + filename + ".txt")
-# text = ""
-# f = open(file_path, mode="r", encoding="utf-8")
-# for line in f:
-#     text = text + str(line) + "\n"
-
-# response = []
-# lines = list(text.split("\n"))
-# cnt = 0
-# abstractive_summary = ""
-# if len(lines) > 200:
-#     final_summary = ""
-#     threshold_lines = 200
-#     while cnt < len(lines):
-#         sub_str = lines[cnt : min(cnt + threshold_lines, len(lines))]
-#         sub_str = "\n".join(sub_str)
-#         inputs = tokenizer.encode(
-#             "summarize: " + sub_str,
-#             return_tensors="pt",
-#             max_length=512,
-#             truncation=True,
-#         )
-#         outputs = model.generate(
-#             inputs,
-#             max_length=700,
-#             min_length=100,
-#             length_penalty=2.0,
-#             num_beams=4,
-#             early_stopping=True,
-#         )
-#         abstractive_summary = abstractive_summary + tokenizer.decode(outputs[0])
-#         cnt = cnt + threshold_lines
-# else:
-#     print("abstractive only")
-#     final_summary = text
-#     inputs = tokenizer.encode(
-#         "summarize: " + final_summary,
-#         return_tensors="pt",
-#         max_length=512,
-#         truncation=True,
-#     )
-#     outputs = model.generate(
-#         inputs,
-#         max_length=700,
-#         min_length=100,
-#         length_penalty=2.0,
-#         num_beams=4,
-#         early_stopping=True,
-#     )
-
-#     abstractive_summary = tokenizer.decode(outputs[0])
-# with open(summary_path, "w") as f:
-#     f.write(abstractive_summary)
-# print("summary done")
+async def init_summary(filename, url):
+    time.sleep(10)
+    content = ""
+    if filename[-4:] == ".pdf":
+        filename = filename[:-4]
+    file_path = os.path.join("./", "saved_txt/" + filename + ".txt")
+    summary_path = os.path.join("./", "saved_summary/" + filename + ".txt")
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            content = f.read()
+    files = {"text": content}
+    r = requests.post(url, data=files)
+    try:
+        with open(summary_path, "w") as f:
+            f.write(r.text)
+    except IOError as e:
+        print(e)
+    print("Summary saved: {}\n".format(summary_path))
 
 
 async def pdf_all(filename):
@@ -170,7 +133,7 @@ async def pdf_all(filename):
             f.write(ans)
     except IOError as e:
         print(e)
-    print("textdone")
+    print("Text saved: {}\n".format("./saved_txt/" + filename[:-4] + ".txt"))
     # speaker = pyttsx3.init()
     # speaker.save_to_file(ans, "./saved_mp3/" + filename[:-4] + ".mp3")
     # speaker.runAndWait()
