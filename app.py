@@ -7,15 +7,10 @@ from minePdf import pdf_all, init_audio, init_summary
 from fastapi.middleware.cors import CORSMiddleware
 import time
 
-# from reportlab.pdfgen.canvas import Canvas
-
-# pyttsx3
-# espeak
-# fastapi
-# ffmpeg
 app = FastAPI()
-origins = ["*"]
 
+# Adding CORS as middleware
+origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -24,32 +19,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# @app.on_event("startup")
-# async def startup_event():
-#     model = T5ForConditionalGeneration.from_pretrained("t5-base")
-#     # # initialize the model tokenizer
-#     tokenizer = T5Tokenizer.from_pretrained("t5-base")
-
-
+# Saves the uploaded PDF file and starts background tasks for text, audio, summary conversion
 @app.post("/pdf_initialize")
 async def pdfToText(
     background_tasks: BackgroundTasks, byteFile: UploadFile = File(...)
 ):
     path = "./saved_pdf/" + byteFile.filename
+
+    # Creating an empty pdf file
     with open(path, "w") as f:
         f.write("")
 
+    # Appending to file chunk by chunk
     with open(path, "ab") as f:
         for chunk in iter(lambda: byteFile.file.read(10000), b""):
             f.write(chunk)
-    # background_tasks.add_task(init_summary, byteFile.filename)
+
+    # URL for ngrok server running at colab, to serve summary
     url = "http://51054e4f3efb.ngrok.io"
-    # await pdf_all(byteFile.filename)
+
+    # background_task for text, audio, summary, runs after return
     background_tasks.add_task(pdf_all, byteFile.filename)
     background_tasks.add_task(init_summary, byteFile.filename, url)
     background_tasks.add_task(init_audio, byteFile.filename)
 
-    # await init_audio(byteFile.filename)
+    # Return received file's details
     return {
         "filename": byteFile.filename,
         "content-type": byteFile.content_type,
@@ -57,12 +51,14 @@ async def pdfToText(
     }
 
 
+# test api created for testing file upload
 @app.post("/test_formdata")
 async def formdata(byteFile: UploadFile = File(...)):
     print(byteFile.filename)
     return {"status": "done"}
 
 
+# Get summary from stored location as FileResponse
 @app.post("/get_summary")
 async def returnSummary(filename: str):
     if filename[-4:] == ".pdf":
@@ -73,6 +69,7 @@ async def returnSummary(filename: str):
     return {"Error": "Summary not found!"}
 
 
+# Get text from stored location as FileResponse
 @app.post("/get_text")
 async def returnTxt(filename: str):
     if filename[-4:] == ".pdf":
@@ -83,6 +80,7 @@ async def returnTxt(filename: str):
     return {"Error": "Text not found!"}
 
 
+# Get mp3 from stored location as FileResponse
 @app.get("/get_mp3")
 async def returnMp3(filename: str):
     if filename[-4:] == ".pdf":

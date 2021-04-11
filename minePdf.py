@@ -11,13 +11,12 @@ import copy
 import time
 import requests
 
-
+# Used to threshold paragrams to remove headers, footers and irrelevant text
 def frequencyThreshold(ans):
     f = defaultdict(int)
     newans = []
     for block in ans:
         f[block[0]] += block[2]
-    # print(f)
     threshold = max(f, key=lambda x: f[x])
     for block in ans:
         if threshold <= block[0]:
@@ -25,6 +24,7 @@ def frequencyThreshold(ans):
     return "\n".join(newans)
 
 
+# Initializes audio from textfile
 async def init_audio(filename):
     time.sleep(10)
     content = ""
@@ -40,11 +40,13 @@ async def init_audio(filename):
     # speaker.save_to_file(contentD, audio_path)
     # speaker.runAndWait()
 
+    # Using googleTextToSpeech to save audio
     myobj = gTTS(text=contentD, lang="en", slow=False)
     myobj.save(audio_path)
     print("Audio Saved: {}\n".format(audio_path))
 
 
+# Initializes summary from textfile
 async def init_summary(filename, url):
     time.sleep(10)
     content = ""
@@ -52,11 +54,15 @@ async def init_summary(filename, url):
         filename = filename[:-4]
     file_path = os.path.join("./", "saved_txt/" + filename + ".txt")
     summary_path = os.path.join("./", "saved_summary/" + filename + ".txt")
+
+    # Sends text to colab->ngrok server and receives summarized text
     if os.path.exists(file_path):
         with open(file_path, "r") as f:
             content = f.read()
     files = {"text": content}
     r = requests.post(url, data=files)
+
+    # Writing received text to file
     try:
         with open(summary_path, "w") as f:
             f.write(r.text)
@@ -65,6 +71,7 @@ async def init_summary(filename, url):
     print("Summary saved: {}\n".format(summary_path))
 
 
+# Initialized text file from pdf
 async def pdf_all(filename):
     doc = fitz.open("./saved_pdf/" + filename)
     ans = []
@@ -134,16 +141,3 @@ async def pdf_all(filename):
     except IOError as e:
         print(e)
     print("Text saved: {}\n".format("./saved_txt/" + filename[:-4] + ".txt"))
-    # speaker = pyttsx3.init()
-    # speaker.save_to_file(ans, "./saved_mp3/" + filename[:-4] + ".mp3")
-    # speaker.runAndWait()
-
-    # myobj = gTTS(text=ans, lang="en", slow=False)
-    # myobj.save("./saved_mp3/" + filename[:-4] + ".mp3")
-    # print("saved")
-    # print(ans)
-    # print("\n")
-
-
-# if __name__ == "__main__":
-#     pdf_all("r1.pdf")

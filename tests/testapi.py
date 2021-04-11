@@ -1,3 +1,4 @@
+# Used to upload a pdf file and start its conversion
 import requests
 from io import BytesIO
 

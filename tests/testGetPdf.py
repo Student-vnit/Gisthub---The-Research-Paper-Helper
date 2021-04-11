@@ -1,3 +1,4 @@
+# Used to get text from server
 import requests
 from io import BytesIO
 
