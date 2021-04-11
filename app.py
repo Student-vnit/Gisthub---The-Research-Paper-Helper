@@ -3,8 +3,9 @@ from fastapi import FastAPI, Query, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi import File, UploadFile, Request
 import os
-from minePdf import pdf_all, init_audio
+from minePdf import pdf_all, init_audio, init_summary
 from fastapi.middleware.cors import CORSMiddleware
+import time
 
 # from reportlab.pdfgen.canvas import Canvas
 
@@ -42,10 +43,12 @@ async def pdfToText(
         for chunk in iter(lambda: byteFile.file.read(10000), b""):
             f.write(chunk)
     # background_tasks.add_task(init_summary, byteFile.filename)
+    url = "http://51054e4f3efb.ngrok.io"
+    # await pdf_all(byteFile.filename)
     background_tasks.add_task(pdf_all, byteFile.filename)
+    background_tasks.add_task(init_summary, byteFile.filename, url)
     background_tasks.add_task(init_audio, byteFile.filename)
 
-    # await pdf_all(byteFile.filename)
     # await init_audio(byteFile.filename)
     return {
         "filename": byteFile.filename,
@@ -80,7 +83,7 @@ async def returnTxt(filename: str):
     return {"Error": "Text not found!"}
 
 
-@app.post("/get_mp3")
+@app.get("/get_mp3")
 async def returnMp3(filename: str):
     if filename[-4:] == ".pdf":
         filename = filename[:-4]
