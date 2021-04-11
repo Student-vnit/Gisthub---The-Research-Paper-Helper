@@ -56,7 +56,7 @@ async def init_summary(filename, url):
         with open(file_path, "r") as f:
             content = f.read()
     files = {"text": content}
-    r = await requests.post(url, data=files)
+    r = requests.post(url, data=files)
     try:
         with open(summary_path, "w") as f:
             f.write(r.text)
