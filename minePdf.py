@@ -27,6 +27,7 @@ def frequencyThreshold(ans):
 # Initializes audio from textfile
 async def init_audio(filename):
     time.sleep(10)
+    print("Init Audio started")
     content = ""
     if filename[-4:] == ".pdf":
         filename = filename[:-4]
@@ -50,6 +51,7 @@ async def init_audio(filename):
 async def init_summary(filename, url):
     time.sleep(10)
     content = ""
+    print("Init summary started")
     if filename[-4:] == ".pdf":
         filename = filename[:-4]
     file_path = os.path.join("./", "saved_txt/" + filename + ".txt")
