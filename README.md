@@ -47,7 +47,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
     <li><a href="#what-we-learned">What We Learned</a></li>
   </ol>
 </details>
@@ -99,17 +98,28 @@ Install heroku-cli for your operating system.
    ```sh
    heroku buildpacks:add --index 1 heroku-community/apt
    ```
-
-<!-- USAGE EXAMPLES -->
+   <!-- USAGE EXAMPLES -->
 
 ## Usage
 
-- Open the colab notebook [SUMMARIZER.ipynb](https://github.com/Student-vnit/Gisthub---The-Research-Paper-Helper/SUMMARIZER.ipynb) in Google Colab and start the ngrok server. Note the ngrok _url_ and replace app.py/init*summary/colab_url with \_url*.
+- Open the colab notebook [SUMMARIZER.ipynb](https://github.com/Student-vnit/Gisthub---The-Research-Paper-Helper/SUMMARIZER.ipynb) in Google Colab and start the ngrok server. Note the ngrok _url_ and replace app.py/initsummary/colab_url with url.
 - Deploy to heroku:
 
-```sh
-git push heroku master
-```
+  ```sh
+  git push heroku master
+  ```
+
+- Change directory to ./softlab4, change remote url to your heroku url.
+
+- Start the server:
+  ```
+  npm install
+  ```
+  ```
+  npm run
+  ```
+
+Access server at [localhost:3000](localhost:3000) and now you can upload and get audio, summary and text.
 
 <!-- ROADMAP -->
 
@@ -161,17 +171,14 @@ Project Link: [https://github.com/Student-vnit/Gisthub---The-Research-Paper-Help
 
 Website Link: [https://sites.google.com/students.vnit.ac.in/gisthub/home](https://sites.google.com/students.vnit.ac.in/gisthub/home)
 
-<!-- ACKNOWLEDGEMENTS -->
-
-## Acknowledgements
-
-- []()
-- []()
-- []()
-
 <!-- WHAT WE LEARNED -->
 
 ## What We Learned
+
+- Deploying app on **_Heroku_**, with custom apt packages and pip packages.
+- Deploying machine learning based web-api usi **_Flask-ngrok_** and **_Google Colab_**.
+- Building web-app with **_React-js_** and communicating with web requests.
+- Creating **_FastAPI_** server to upload, process and serve basic files such as text, pdf and audio.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

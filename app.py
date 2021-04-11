@@ -40,8 +40,8 @@ async def pdfToText(
 
     # background_task for text, audio, summary, runs after return
     background_tasks.add_task(pdf_all, byteFile.filename)
-    background_tasks.add_task(init_audio, byteFile.filename)
     background_tasks.add_task(init_summary, byteFile.filename, url)
+    background_tasks.add_task(init_audio, byteFile.filename)
 
     # Return received file's details
     return {
