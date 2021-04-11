@@ -36,7 +36,7 @@ async def pdfToText(
             f.write(chunk)
 
     # URL for ngrok server running at colab, to serve summary
-    url = "http://c606f4ff6ab6.ngrok.io"
+    url = "http://28095768d382.ngrok.io"
 
     # background_task for text, audio, summary, runs after return
     background_tasks.add_task(pdf_all, byteFile.filename)
