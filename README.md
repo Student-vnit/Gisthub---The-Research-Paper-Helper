@@ -153,7 +153,7 @@ Shraddha Bhagwat - [github/shraddhab29](https://github.com/shraddhab29) - shradd
 
 Abhishek Jaiswal - [github/abhishekjaiswal55236](https://github.com/abhishekjaiswal55236) - abhishekjaiswal55236@gmail.com
 
-Samruddhi - [github@shraddhab29](https://github.com/shraddhab29) - shraddhabhagawat2001@gmail.com
+Samruddhi - [github@samruddhipande111](https://github.com/shraddhab29) - samruddhipande111@gmail.com.com
 
 <br /><br />
 
