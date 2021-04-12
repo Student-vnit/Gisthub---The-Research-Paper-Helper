@@ -153,7 +153,7 @@ Abhishek Kumar Yadav - [github/abhk943](https://github.com/abhk943) - abhk943@gm
 
 Vanshika Jain - [github/Vanshika-30](https://github.com/Vanshika-30) - jvanshika30@gmail.com
 
-Hardik Bhatia - [github/hardik2000](https://github.com/hardik2000) - bhardik09@gmail.com
+Hardik Bhatia - [github/hardik2000](https://github.com/hardik2000) - hardikbhatia2000@gmail.com
 
 Suyash Khade - [github/Suyash1700](https://github.com/Suyash1700) - suyukhade@gmail.com
 
@@ -163,7 +163,7 @@ Shraddha Bhagwat - [github/shraddhab29](https://github.com/shraddhab29) - shradd
 
 Abhishek Jaiswal - [github/abhishekjaiswal55236](https://github.com/abhishekjaiswal55236) - abhishekjaiswal55236@gmail.com
 
-Samruddhi - [github@samruddhipande111](https://github.com/shraddhab29) - samruddhipande111@gmail.com.com
+Samruddhi - [github@samruddhipande111](https://github.com/shraddhab29) - samruddhipande111@gmail.com
 
 <br /><br />
 
